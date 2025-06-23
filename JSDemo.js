@@ -1,12 +1,21 @@
-import {GetCalculationResult} from "./Math.js";
+import {GetDualCalculationResult} from "./Math.js";
+import {GetSingleCalculationResult} from "./Math.js";
 
-let previousResult = 0, currentValue = "", currentOperator = "";
+let previousResult = 0, currentValue = "0", currentOperator = "";
 let calculationHistory;
 const operationLabelPart = ".operationLabelPart";
 const inputPart = ".inputPart";
 const operatorLabel = document.querySelector(operationLabelPart);
 const inputText = document.querySelector(inputPart);
-const operands = ["+", "-", "*", "/", "%", "√", "Sqr", "Sqrt"];
+const dualOperands = ["+", "-", "*", "/", "%"];
+const singleOperands = ["√", "Sqr", "Sqrt"];
+
+const historyBtn = document.getElementById('historyBtn');
+const navPanel = document.getElementById('navPanel');
+
+historyBtn.addEventListener('click', () => {
+  navPanel.classList.toggle('active');
+});
 
 document.querySelectorAll('button').forEach(button => 
 {
@@ -14,48 +23,50 @@ document.querySelectorAll('button').forEach(button =>
   button.addEventListener('click', Calculate);
 });
 
-function Calculate(buttonEvent) {
+function Calculate(buttonEvent) 
+{
   const button = buttonEvent.currentTarget;
-  const text = button.textContent;
+  const value = button.dataset.value;
 
-  if (isDigit(text) || text === '.') 
+  if (isDigit(value) || value === '.') 
   {
-    currentValue += text;
+    currentValue += value;
     currentValue = currentValue.replace(/^0+(?!\.)/, ''); // remove leading zeros
   } 
-  else if (operands.includes(text)) 
+  else if (dualOperands.includes(value)) 
   {
     if (currentOperator && currentValue !== "") 
-      previousResult = GetCalculationResult(previousResult, currentOperator, currentValue);
+      previousResult = GetDualCalculationResult(previousResult, currentOperator, currentValue);
     else if (currentValue !== "") 
       previousResult = parseFloat(currentValue);
-    else if(currentValue === "")
-    {
-      previousResult = GetCalculationResult(previousResult, currentOperator, previousResult);
-    }
-
-    
     currentValue = "";
-    currentOperator = text;
+    currentOperator = value;
   } 
-  else if (text === "=") 
+  else if(singleOperands.includes(value))
+  {
+    if(currentValue === "" && previousResult === "") return;
+    currentValue = GetSingleCalculationResult(currentValue === "" ? previousResult : currentValue, value);
+    previousResult = GetDualCalculationResult(previousResult, currentOperator, currentValue);
+    currentValue = currentOperator = "";
+  }
+  else if (value === "=") 
   {
     if (currentOperator && currentValue !== "") 
     {
-      previousResult = GetCalculationResult(previousResult, currentOperator, currentValue);
+      previousResult = GetDualCalculationResult(previousResult, currentOperator, currentValue);
       currentValue = previousResult.toString();
       currentOperator = "";
     }
   } 
-  else if (text === "C" || text === "CE") 
+  else if (value === "C" || value === "CE") 
   {
     currentValue = "";
     previousResult = 0;
     currentOperator = "";
   } 
-  else if (text === "←") 
+  else if (value === "←") 
     currentValue = currentValue.slice(0, -1);
-  else if (text === "Neg") 
+  else if (value === "Neg") 
   {
     if (currentValue) 
     {
