@@ -2,20 +2,45 @@ import {GetDualCalculationResult} from "./Math.js";
 import {GetSingleCalculationResult} from "./Math.js";
 
 let previousResult = 0, currentValue = "0", currentOperator = "";
-let calculationHistory;
+let calculationHistory = 
+{
+  Calculation : [],
+  Result : []
+}
 const operationLabelPart = ".operationLabelPart";
 const inputPart = ".inputPart";
 const operatorLabel = document.querySelector(operationLabelPart);
 const inputText = document.querySelector(inputPart);
 const dualOperands = ["+", "-", "*", "/", "%"];
 const singleOperands = ["√", "Sqr", "Sqrt"];
-
+const historyContainer = document.getElementById('historyContainer');
 const historyBtn = document.getElementById('historyBtn');
+const deleteBtn = document.getElementById('deleteBtn');
 const navPanel = document.getElementById('navPanel');
 
-historyBtn.addEventListener('click', () => {
+historyBtn.addEventListener('click', () => 
+{
   navPanel.classList.toggle('active');
+  historyContainer.innerHTML = "";
+  console.log(calculationHistory.Calculation.length);
+  for(let ctr = 0; ctr < calculationHistory.Calculation.length; ctr++)
+  {
+    const newDt = document.createElement('dt');
+    const newDd = document.createElement('dd');
+    newDt.textContent = calculationHistory.Calculation[ctr];
+    newDd.textContent = calculationHistory.Result[ctr];
+    historyContainer.appendChild(newDt);
+    historyContainer.appendChild(newDd);
+  }
 });
+
+deleteBtn.addEventListener('click', () =>
+{
+  historyContainer.innerHTML = "";
+  calculationHistory.Calculation = [];
+  calculationHistory.Result = [];
+})
+
 
 document.querySelectorAll('button').forEach(button => 
 {
@@ -36,7 +61,12 @@ function Calculate(buttonEvent)
   else if (dualOperands.includes(value)) 
   {
     if (currentOperator && currentValue !== "") 
+    {
+      calculationHistory.Calculation.push(`${previousResult}${currentOperator}${currentValue}`);
       previousResult = GetDualCalculationResult(previousResult, currentOperator, currentValue);
+      calculationHistory.Result.push(previousResult);
+      console.log(calculationHistory);
+    }
     else if (currentValue !== "") 
       previousResult = parseFloat(currentValue);
     currentValue = "";
@@ -81,7 +111,6 @@ function Calculate(buttonEvent)
       }
     }
   }
-
   operatorLabel.textContent = previousResult + " " + currentOperator;
   inputText.value = currentValue;
 }

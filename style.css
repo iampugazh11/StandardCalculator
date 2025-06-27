@@ -30,6 +30,61 @@ img
   overflow: hidden;
 }
 
+#navPanel
+{
+  display: flex;
+  grid-template-columns: auto, 1fr;
+  gap: 10px; 
+  width: 100%;
+}
+
+#deleteBtn
+{
+  margin-top: 10px;
+  margin-left: 10px;
+  width: 30px;
+  height: 25px;
+}
+
+#historyPart
+{
+  margin-top: 0px;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  scroll-behavior: auto;
+  position: relative;
+  margin-right: 0px;
+  text-align: right;
+  padding-right: 10%;
+}
+
+#historyPart::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+  background: transparent;
+}
+
+#historyPart::-webkit-scrollbar-thumb {
+  background-color: #205781;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+#historyContainer dd {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+#historyContainer dt {
+  font-size: 14px;
+  margin-left: 20px;
+  margin-top: 10px;
+  color: #555;
+}
+
 .calcBase
 {
     position: relative;
@@ -63,6 +118,7 @@ img
   width: 100%;
   height: 300px;
   background-color: #98D2C0;
+  overflow: hidden;
   color: #fff;
   text-align: center;
   border-radius: 20px;
@@ -137,7 +193,7 @@ button
 
 @keyframes ripple-animation {
   to {
-    transform: translate(-50%, -50%) scale(4);
+    transform: translate(-50%, -50%) scale(3);
     opacity: 0;
   }
 }

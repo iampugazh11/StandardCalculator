@@ -15,7 +15,7 @@
     <header>Standard Calculator</header>
     <div class="baseContainer">
         <div class="calcBase">
-            <div id="historyPart" style="display: grid;">
+            <div id="historyBtnPart" style="display: grid;">
                 <button id="historyBtn" style="justify-self: end; height: 28px;"><img src="Libraries/History.svg" alt="History"/></button>
             </div>
             <div class="resultPart">
@@ -54,7 +54,15 @@
                 <button data-value="="><span class="material-icons">=</span></button>
             </div>
             <div class="nav-panel" id="navPanel">
-                <button data-value="=">=</button>
+                <button id="deleteBtn" data-value="Delete"><img src="Libraries/Delete.svg" alt="Delete"></button>
+                <div id="historyPart">
+                    <dl id="historyContainer">
+                        <dt>Coffee</dt>
+                        <dd>Black hot drink</dd>
+                        <dt>Milk</dt>
+                        <dd>Dairy cold drink</dd>
+                    </dl>
+                </div>
             </div>
         </div>
     </div>
